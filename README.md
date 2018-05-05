@@ -1,7 +1,7 @@
-# FEWG
-## Fight the Enemies, Win the Game!
+# KAYF
+## Kill All Your Friends
 
-FEWG is a simple command-based multi-player game.
+KAYF is a simple command-based multi-player game.
 
 The server is written in Python and requires Twisted and TwistedWebsocket to run.
 
