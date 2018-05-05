@@ -1,0 +1,14 @@
+version: '2'
+services:
+    web:
+        image: nginx
+        volumes:
+            - ./client/webapp:/usr/share/nginx/html
+        ports:
+            - "8000:80"
+    wsserver:
+        build: ./server
+        volumes:
+            - ./server:/code
+        ports:
+            - "1234:1234"
