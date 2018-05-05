@@ -1,0 +1,8 @@
+<p>Log:</p>
+<div id="logdiv" class="well scroll">
+	<div ng-repeat="logItem in logCtrl.clientlog" 
+	ng-class="logItem.type"
+	class="log-item">
+	{{logItem.msg}}</div>
+	<br/>
+</div>

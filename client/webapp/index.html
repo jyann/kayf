@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+<meta http-equiv="cache-control" content="no-cache">
+<meta http-equiv="pragma" content="no-cache">
+
+<!--Include angularjs-->
+<script 
+src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js">
+</script>
+<!--Include jquery-->
+<script
+src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js">
+</script>
+<!--Include bootstrap-->
+<link rel="stylesheet" 
+href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+<script
+src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js">
+</script>
+
+<link href="css/style.css" rel="stylesheet"/>
+
+<script src="js/fewg-app.js"></script>
+<script src="js/log.js"></script>
+<script src="js/connect-screen.js"></script>
+<script src="js/login-screen.js"></script>
+<script src="js/lobby-screen.js"></script>
+<script src="js/game-screen.js"></script>
+<script src="js/command-form.js"></script>
+
+</head>
+<body ng-app="FEWGApp">
+	<div ng-controller="ClientCtrl as client">
+		<div id="clientlog" class="well">
+			<p ng-hide="client.isStatus('Connecting')
+					|| client.isStatus('Logging in')"
+				class="float-right">
+				Logged in as: {{client.root.username}}
+			</p>
+			Status: {{logCtrl.root.data.status}}<br/><hr/>
+			<log></log>
+		</div>
+		<div ng-show="client.isStatus('Connecting')"
+		class="login-form">
+			<connect-screen></connect-screen>
+		</div>
+		<div ng-show="client.isStatus('Logging in')"
+		class="login-form">
+			<login-screen></login-screen>
+		</div>
+		<div ng-show="client.isStatus('In lobby')">
+			<lobby-screen></lobby-screen>
+		</div>
+		<div ng-show="client.isStatus('In game')">
+			<game-screen></game-screen>
+		</div>
+		<div ng-hide="client.isStatus('Connecting')
+				|| client.isStatus('Logging in')">
+			<command-form></command-form>
+		</div>
+		<div ng-show="client.isStatus('In lobby')"
+		class="well command-hints">
+			<ng-include src="'templates/lobby-cmd-hints.html'">
+			</ng-include>
+		</div>
+		<div ng-show="client.isStatus('In game')"
+		class="well command-hints">
+			<ng-include src="'templates/game-cmd-hints.html'">
+			</ng-include>
+		</div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,6 @@
+*.pyc
+*.properties
+*.DS_Store
+*.log
+venv/
+players.json
