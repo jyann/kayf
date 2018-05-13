@@ -86,14 +86,11 @@ class GameProtocol(Protocol):
 """
 class GameServerFactory(ServerFactory):
 	"""Websocket factory for game server."""
-	def __init__(self, proto, props, prop_path):
+	def __init__(self, proto, env):
 		"""Overloaded constructor."""
 		# Link protocol
 		self.protocol = proto
-		# Set properties
-		self.properties = props
-		# Set properties path
-		self.prop_path = prop_path
+		self.env = env
 		# Init server data
 		self.clients = []
 		self.named_clients = {}
@@ -102,12 +99,12 @@ class GameServerFactory(ServerFactory):
 		self.json_decoder = JSONDecoder()
 		self.json_encoder = JSONEncoder()
 		# Init configs
-		serverfuncts.configLog(prop_path+'/server.log')
+		serverfuncts.configLog(self.env.log_path + '/server.log')
 
 	def isFull(self):
 		"""Determines if the number of clients has reached its limit.
 		Client limit is a server property."""
-		return len(self.clients) >= int(self.properties['client_limit'])
+		return len(self.clients) >= int(self.env.client_limit)
 
 	def sendToAll(self, msg):
 		"""Send to all connected clients."""
@@ -124,19 +121,14 @@ from twisted.internet import reactor
 
 class GameServer(object):
 	"""Server class"""
-	def __init__(self, prop_path='.'):
+	def __init__(self, env):
 		"""Constructor"""
-		# Save properties to pass to factory and to write on shutdown
-		self.prop_path = prop_path
-		self.properties = storage.readProperties(self.prop_path
-							+'/server.properties')
+		self.env = env
 		# Set onstop trigger
 		reactor.addSystemEventTrigger('before', 'shutdown', self.onStop)
 		# Set up server
-		svrfactory = GameServerFactory(GameProtocol,
-						self.properties,
-						self.prop_path)
-		reactor.listenTCP(int(self.properties['server_port']), svrfactory)
+		svrfactory = GameServerFactory(GameProtocol, env)
+		reactor.listenTCP(int(self.env.server_port), svrfactory)
 
 	def start(self):
 		"""Start the server."""
@@ -144,6 +136,4 @@ class GameServer(object):
 
 	def onStop(self):
 		"""Clean up before the server stops."""
-		# Store current properties
-		storage.writeProperties(self.prop_path+'/server.properties',
-			self.properties)
+		pass

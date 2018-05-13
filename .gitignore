@@ -4,3 +4,5 @@
 *.log
 venv/
 players.json
+
+server/env.py

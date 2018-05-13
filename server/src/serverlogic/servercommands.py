@@ -15,7 +15,7 @@ def newPlayer(name, password):
 	player['vars']['health'] = 10
 
 	player['stats']['attack'] = 1
-	
+
 	player['stats']['defense'] = 1
 	player['vars']['defense'] = 0
 
@@ -30,9 +30,8 @@ def resetPlayer(player):
 
 def createUser(client, username, password):
 	"""Creates a user and stores the player data"""
-	path = client.factory.prop_path+'/players.json'
-	if username not in getPlayers(path, client.factory.json_decoder):
-		storePlayerData(path, username,
+	if username not in getPlayers(client.factory.env, client.factory.json_decoder):
+		storePlayerData(client.factory.env, username,
 					newPlayer(username, password),
 					client.factory.json_encoder,
 					client.factory.json_decoder)
@@ -42,14 +41,13 @@ def createUser(client, username, password):
 
 def login(client, username, password):
 	"""Log client in"""
-	path = client.factory.prop_path+'/players.json'
-	player = getPlayer(path, username, client.factory.json_decoder)
+	player = getPlayer(client.factory.env, username, client.factory.json_decoder)
 	if player != False and player['password'] == password:
 		# Set status
 		client.status = 'In lobby'
 		# Log in client
 		client.name = username
-		client.playerdata = player	
+		client.playerdata = player
 		client.factory.named_clients[username] = client
 		return True
 	else:
@@ -90,8 +88,7 @@ def levelUp(client, statname):
 	client.playerdata['stats'][statname] += 1
 	client.playerdata['exp'] -= 1
 	# Store updated player data
-	path = client.factory.prop_path+'/players.json'
-	storePlayerData(path, username,
+	storePlayerData(client.factory.env, username,
 				client.playerdata,
 				client.factory.json_encoder,
 				client.factory.json_decoder)
