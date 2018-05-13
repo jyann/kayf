@@ -55,4 +55,3 @@ def storePlayerData(filepath, name, data, encoder, decoder):
 	players = getPlayers(filepath, decoder)
 	players[name] = data
 	open(filepath, 'w').write(encoder.encode(players))
-

@@ -5,8 +5,8 @@ from TwistedWebsocket.server import Protocol
 from twisted.internet.protocol import ServerFactory
 from json import JSONDecoder, JSONEncoder
 
-class FEWGProtocol(Protocol):
-	"""Websocket protocol for FEWG clients."""
+class GameProtocol(Protocol):
+	"""Websocket protocol for game clients."""
 	def onHandshake(self, header):
 		"""Overloaded handshake function."""
 		g = re.search('Origin\s*:\s*(\S+)', header)
@@ -84,8 +84,8 @@ class FEWGProtocol(Protocol):
 			serverfuncts.logMsg('to: '+str(self.name)+" - "+str(resp))
 			print e
 """
-class FEWGServerFactory(ServerFactory):
-	"""Websocket factory for FEWG server."""
+class GameServerFactory(ServerFactory):
+	"""Websocket factory for game server."""
 	def __init__(self, proto, props, prop_path):
 		"""Overloaded constructor."""
 		# Link protocol
@@ -122,7 +122,7 @@ class FEWGServerFactory(ServerFactory):
 
 from twisted.internet import reactor
 
-class FEWGServer(object):
+class GameServer(object):
 	"""Server class"""
 	def __init__(self, prop_path='.'):
 		"""Constructor"""
@@ -133,7 +133,7 @@ class FEWGServer(object):
 		# Set onstop trigger
 		reactor.addSystemEventTrigger('before', 'shutdown', self.onStop)
 		# Set up server
-		svrfactory = FEWGServerFactory(FEWGProtocol,
+		svrfactory = GameServerFactory(GameProtocol,
 						self.properties,
 						self.prop_path)
 		reactor.listenTCP(int(self.properties['server_port']), svrfactory)
